@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avalonia.MusicStore.Views.MainWindow"
+        xmlns:local="using:Avalonia.MusicStore.Views"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         TransparencyLevelHint="AcrylicBlur"
@@ -32,12 +33,20 @@
                 <PathIcon Data="{StaticResource store_microsoft_regular}" />
             </Button>
             
-            <ItemsControl Items="{Binding Albums}">
+            <TextBlock IsVisible="{Binding CollectionEmpty}" Text="Its lonely in here. Purchase some music to get your collection started." HorizontalAlignment="Center" VerticalAlignment="Center" />
+            
+            <ItemsControl Margin="0 40 0 0" Items="{Binding Albums}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                        <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:AlbumView Margin="0 0 20 20" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Panel>
 

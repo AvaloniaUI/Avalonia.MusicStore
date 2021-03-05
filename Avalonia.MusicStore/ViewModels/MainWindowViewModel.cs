@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -9,6 +10,8 @@ namespace Avalonia.MusicStore.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private bool _collectionEmpty;
+        
         public MainWindowViewModel()
         {
             ShowDialog = new Interaction<MusicStoreViewModel, AlbumViewModel?>();
@@ -25,7 +28,16 @@ namespace Avalonia.MusicStore.ViewModels
                 }
             });
             
+            this.WhenAnyValue(x => x.Albums.Count)
+                .Subscribe(x => CollectionEmpty = x == 0);
+            
             RxApp.MainThreadScheduler.Schedule(LoadAlbums);
+        }
+        
+        public bool CollectionEmpty
+        {
+            get => _collectionEmpty;
+            set => this.RaiseAndSetIfChanged(ref _collectionEmpty, value);
         }
         
         private async void LoadAlbums()
@@ -36,6 +48,7 @@ namespace Avalonia.MusicStore.ViewModels
             {
                 Albums.Add(album);
             }
+            
             
             LoadCovers();
         }
