@@ -34,20 +34,21 @@
             </Button>
             
             <TextBlock IsVisible="{Binding CollectionEmpty}" Text="Its lonely in here. Purchase some music to get your collection started." HorizontalAlignment="Center" VerticalAlignment="Center" />
-            
-            <ItemsControl Margin="0 40 0 0" Items="{Binding Albums}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                       <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:AlbumView Margin="0 0 20 20" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+			<ScrollViewer Margin="0 40 0 0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<ItemsControl Items="{Binding Albums}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<local:AlbumView Margin="0 0 20 20" />
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
         </Panel>
 
     </Panel>

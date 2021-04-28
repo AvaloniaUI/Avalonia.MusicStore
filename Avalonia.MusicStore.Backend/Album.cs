@@ -1,10 +1,11 @@
+﻿using iTunesSearch.Library;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using iTunesSearch.Library;
 
 namespace Avalonia.MusicStore.Backend
 {
@@ -25,8 +26,71 @@ namespace Avalonia.MusicStore.Backend
         public string Title { get; set; }
         
         public string CoverUrl { get; set; }
-        
-        private string CachePath => $"./Cache/{Artist} - {Title}";
+
+        // fix issue
+        //private string CachePath => $"./Cache/{Artist} - {Title}";
+        private string CachePath => $"./Cache/{GetSafeFilename(Artist)} - {GetSafeFilename(Title)}";
+
+        public static string GetSafeFilename(string arbitraryString)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var replaceIndex = arbitraryString.IndexOfAny(invalidChars, 0);
+            if (replaceIndex == -1) return arbitraryString;
+
+            var r = new StringBuilder();
+            var i = 0;
+
+            do
+            {
+                r.Append(arbitraryString, i, replaceIndex - i);
+
+                switch (arbitraryString[replaceIndex])
+                {
+                    case '"':
+                        r.Append("''");
+                        break;
+                    case '<':
+                        r.Append('\u02c2'); // '˂' (modifier letter left arrowhead)
+                        break;
+                    case '>':
+                        r.Append('\u02c3'); // '˃' (modifier letter right arrowhead)
+                        break;
+                    case '|':
+                        r.Append('\u2223'); // '∣' (divides)
+                        break;
+                    case ':':
+                        r.Append('-');
+                        break;
+                    case '*':
+                        r.Append('\u2217'); // '∗' (asterisk operator)
+                        break;
+                    case '\\':
+                    case '/':
+                        r.Append('\u2044'); // '⁄' (fraction slash)
+                        break;
+                    case '\0':
+                    case '\f':
+                    case '?':
+                        break;
+                    case '\t':
+                    case '\n':
+                    case '\r':
+                    case '\v':
+                        r.Append(' ');
+                        break;
+                    default:
+                        r.Append('_');
+                        break;
+                }
+
+                i = replaceIndex + 1;
+                replaceIndex = arbitraryString.IndexOfAny(invalidChars, i);
+            } while (replaceIndex != -1);
+
+            r.Append(arbitraryString, i, arbitraryString.Length - i);
+
+            return r.ToString();
+        }
 
         public async Task<Stream> LoadCoverBitmapAsync()
         {
