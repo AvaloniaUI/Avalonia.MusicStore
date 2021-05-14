@@ -15,7 +15,7 @@ namespace Avalonia.MusicStore.Views
             this.AttachDevTools();
 #endif
             
-            this.WhenActivated(d => d(ViewModel.BuyMusicCommand.Subscribe(Close)));
+            this.WhenActivated(d => d(ViewModel!.BuyMusicCommand.Subscribe(Close)));
         }
 
         private void InitializeComponent()
