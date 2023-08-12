@@ -6,7 +6,7 @@ using System;
 
 namespace Avalonia.MusicStore.Views
 {
-    public class MusicStoreWindow : ReactiveWindow<MusicStoreViewModel>
+    public partial class MusicStoreWindow : ReactiveWindow<MusicStoreViewModel>
     {
         public MusicStoreWindow()
         {
