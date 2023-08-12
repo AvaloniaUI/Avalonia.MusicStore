@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace Avalonia.MusicStore.ViewModels
+namespace Avalonia.MusicStore.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }

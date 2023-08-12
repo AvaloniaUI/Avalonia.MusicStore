@@ -10,8 +10,8 @@ namespace Avalonia.MusicStore.Backend
 {
     public class Album
     {
-        private static HttpClient s_httpClient = new();
-        private static iTunesSearchManager s_SearchManager = new();
+        private static HttpClient _httpClient = new();
+        private static iTunesSearchManager _searchManager = new();
         
         public Album(string artist, string title, string coverUrl)
         {
@@ -36,7 +36,7 @@ namespace Avalonia.MusicStore.Backend
             }
             else
             {
-                var data = await s_httpClient.GetByteArrayAsync(CoverUrl);
+                var data = await _httpClient.GetByteArrayAsync(CoverUrl);
 
                 return new MemoryStream(data);
             }
@@ -49,10 +49,8 @@ namespace Avalonia.MusicStore.Backend
                 Directory.CreateDirectory("./Cache");
             }
 
-            using (var fs = File.OpenWrite(CachePath))
-            {
-                await SaveToStreamAsync(this, fs);
-            }
+            await using var fs = File.OpenWrite(CachePath);
+            await SaveToStreamAsync(this, fs);
         }
 
         public Stream SaveCoverBitmapSteam()
@@ -92,7 +90,7 @@ namespace Avalonia.MusicStore.Backend
 
         public static async Task<IEnumerable<Album>> SearchAsync(string searchTerm)
         {
-            var query = await s_SearchManager.GetAlbumsAsync(searchTerm).ConfigureAwait(false);
+            var query = await _searchManager.GetAlbumsAsync(searchTerm).ConfigureAwait(false);
 
             return query.Albums.Select(x =>
                 new Album(x.ArtistName, x.CollectionName, x.ArtworkUrl100.Replace("100x100bb", "600x600bb")));

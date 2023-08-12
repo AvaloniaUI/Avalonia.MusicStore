@@ -1,15 +1,12 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Avalonia.MusicStore.ViewModels"
+        xmlns:views="clr-namespace:Avalonia.MusicStore.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avalonia.MusicStore.Views.MainWindow"
-        xmlns:local="using:Avalonia.MusicStore.Views"
-        WindowStartupLocation="CenterScreen"
-        Background="Transparent"
-        TransparencyLevelHint="AcrylicBlur"
-        ExtendClientAreaToDecorationsHint="True"
+        x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Avalonia.MusicStore">
 
@@ -35,16 +32,16 @@
             
             <TextBlock IsVisible="{Binding CollectionEmpty}" Text="Its lonely in here. Purchase some music to get your collection started." HorizontalAlignment="Center" VerticalAlignment="Center" />
             
-            <ItemsControl Margin="0 40 0 0" Items="{Binding Albums}">
+            <ItemsControl Margin="0 40 0 0" ItemsSource="{Binding Albums}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                       <WrapPanel />
+                        <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:AlbumView Margin="0 0 20 20" />
+                        <views:AlbumView Margin="0 0 20 20" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
